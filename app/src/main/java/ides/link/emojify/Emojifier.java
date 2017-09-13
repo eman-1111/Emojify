@@ -34,6 +34,7 @@ public class Emojifier {
     static Bitmap detectFacesAndOverlayEmoji(Context context, Bitmap picture) {
 
         // Create the face detector, disable tracking and enable classifications
+        Bitmap resultBitmap = picture;
         FaceDetector detector = new FaceDetector.Builder(context)
                 .setTrackingEnabled(false)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
@@ -59,12 +60,12 @@ public class Emojifier {
 
             Bitmap emoji = BitmapFactory.decodeResource(context.getResources(), imageId);
 
-            return addBitmapToFace(picture, emoji, face);
+            resultBitmap =  addBitmapToFace(resultBitmap, emoji, face);
         }
 
         // Release the detector
         detector.release();
-        return null;
+        return resultBitmap;
     }
 
     /**
