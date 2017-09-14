@@ -4,16 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
-import com.google.android.gms.vision.face.Landmark;
+
+import timber.log.Timber;
 
 /**
  * Created by Eman on 9/12/2017.
@@ -46,8 +44,7 @@ public class Emojifier {
         // Detect the faces
         SparseArray<Face> faces = detector.detect(frame);
 
-        // Log the number of faces
-        Log.d(LOG_TAG, "detectFaces: number of faces = " + faces.size());
+        Timber.d("detectFaces: number of faces = " + faces.size());
 
         // If there are no faces detected, show a Toast message
         if (faces.size() == 0) {
@@ -60,7 +57,7 @@ public class Emojifier {
 
             Bitmap emoji = BitmapFactory.decodeResource(context.getResources(), imageId);
 
-            resultBitmap =  addBitmapToFace(resultBitmap, emoji, face);
+            resultBitmap = addBitmapToFace(resultBitmap, emoji, face);
         }
 
         // Release the detector
@@ -78,6 +75,11 @@ public class Emojifier {
         float smilling = face.getIsSmilingProbability();
         float rightOpen = face.getIsRightEyeOpenProbability();
         float liftOpen = face.getIsLeftEyeOpenProbability();
+        
+        Timber.d("whichEmoji: smilingProb = " + smilling);
+        Timber.d("whichEmoji: leftEyeOpenProb = " + liftOpen);
+        Timber.d("whichEmoji: rightEyeOpenProb = " + rightOpen);
+
         boolean isSmilling = false, isRightOpen = false, isLiftOpen = false;
         if (smilling >= SMILING_PROB_THRESHOLD) {
             isSmilling = true;
